@@ -4,19 +4,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import MicIcon from "@mui/icons-material/Mic";
 import { Button } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import useStateValue from "../StateProvider"
+import { useStateValue } from "../StateProvider"
 import { actionTypes } from "../reducer";
 
 const Landing = () => {
-  const [state, dispatch] = useStateValue();
+  const [{}, dispatch] = useStateValue();
 
   const [input, setInput] = useState("")
   const navigate = useNavigate()
 
   const search = e => {
     e.preventDefault()
-
-    console.log("you hit search")
 
     dispatch({
       type: actionTypes.SET_SEARCH_TERM,
@@ -33,7 +31,7 @@ const Landing = () => {
         <img src={Logo} id="logo" alt="" />
       </figure>
 
-      <form className="input--wrapper">
+      <form action="/search" className="input--wrapper">
         <SearchIcon className="input__icon" />
         <input defaultValue={input} onSubmit={e => setInput(e.target.value)}/>
         <MicIcon />
