@@ -12,7 +12,10 @@ import { useStateValue } from "../StateProvider";
 import useGoogleSearch from "../useGoogleSearch";
 
 const Search = () => {
-  
+  const [{ term }, dispatch] = useStateValue();
+  const { data } = useGoogleSearch(term);
+
+  console.log(data);
   return (
     <section id="search">
       <div className="search__header">
@@ -20,7 +23,7 @@ const Search = () => {
           <img src={Logo} id="logo" alt="" />
         </Link>
         <div className="search__header--body">
-          <SearchBar hideButtons />
+          <SearchBar hideButtons search />
           <div className="search__options">
             <div className="search__options--left">
               <div className="search__option">
@@ -59,10 +62,39 @@ const Search = () => {
           </div>
         </div>
       </div>
-      <div class="gcse-searchresults-only">
+      {term && (
+        <div className="search__results">
+          <p className="search__result--count">
+            About {data?.searchInformation.formattedTotalResults} results (
+            {data?.searchInformation.formattedSearchTime} seconds) for{" "}
+            {<strong>"{term}"</strong>}
+          </p>
 
-      </div>
-      <script async src="https://cse.google.com/cse.js?cx=1ab32598bf556d77c"></script>
+          {data?.items.map((item) => (
+            <div className="search__result">
+              <a className="search__result--anchor" href={item.link}>
+                {item.pagemap?.cse_image?.length > 0 &&
+                  item.pagemap?.cse_image[0]?.src && (
+                    <img
+                      className="search__result--img"
+                      src={
+                        item.pagemap?.cse_image?.length > 0 &&
+                        item.pagemap?.cse_image[0]?.src
+                      }
+                      alt=""
+                    />
+                  )}
+                {item.displayLink}
+              </a>
+              <a href={item.link} className="search__result--title">
+                <h2>{item.title}</h2>
+              </a>
+
+              <p className="search__result--snippet">{item.snippet}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 };

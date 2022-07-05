@@ -9,33 +9,28 @@ import { actionTypes } from "../reducer";
 const SearchBar = ({ hideButtons }) => {
   const [{}, dispatch] = useStateValue();
 
-  const [input, setInput] = useState("");
-
+  const [term, setTerm] = useState("");
   const navigate = useNavigate();
 
-  const search = (event) => {
-    event.preventDefault();
+  const search = (e) => {
+    e.preventDefault();
 
     dispatch({
       type: actionTypes.SET_SEARCH_TERM,
-      term: input,
+      term: term,
     });
 
+    // route to search page without refreshing
     navigate("/search");
   };
 
   return (
-    <>
-      <form method="get" role="search" className="input--wrapper">
+    <form className="search">
+      <div className="input--wrapper">
         <SearchIcon className="input__icon" />
-        <input
-          autoComplete="on"
-          name="q"
-          defaultValue={input}
-          onChange={(event) => setInput(event.target.value)}
-        />
+        <input value={term} onChange={(e) => setTerm(e.target.value)} />
         <MicIcon />
-      </form>
+      </div>
       {!hideButtons && (
         <div className="search__buttons">
           <Button type="submit" onClick={search}>
@@ -44,7 +39,7 @@ const SearchBar = ({ hideButtons }) => {
           <Button>I'm Feeling Lucky</Button>
         </div>
       )}
-    </>
+    </form>
   );
 };
 
